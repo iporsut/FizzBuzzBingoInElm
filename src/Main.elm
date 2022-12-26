@@ -47,19 +47,19 @@ fizzBuzzNumberToStr number =
             String.fromInt n
 
 
-type alias BingGoCell =
+type alias BingoCell =
     { number : FizzBuzzNumber
     , chosen : Bool
     , choosable : Bool
     }
 
 
-type alias BingGoBoard =
-    Array BingGoCell
+type alias BingoBoard =
+    Array BingoCell
 
 
-makeBingGoBoard : List Int -> Maybe BingGoBoard
-makeBingGoBoard nums =
+makeBingoBoard : List Int -> Maybe BingoBoard
+makeBingoBoard nums =
     let
         makeCell num =
             { number = toFizzBuzzNumber num, chosen = False, choosable = False }
@@ -71,7 +71,7 @@ makeBingGoBoard nums =
         Just (Array.fromList (List.map makeCell nums))
 
 
-chooseCell : CellIndex -> BingGoBoard -> BingGoBoard
+chooseCell : CellIndex -> BingoBoard -> BingoBoard
 chooseCell index board =
     let
         getCell =
@@ -85,7 +85,7 @@ chooseCell index board =
             Array.set index { cell | chosen = True } board
 
 
-markCell : FizzBuzzNumber -> BingGoCell -> BingGoCell
+markCell : FizzBuzzNumber -> BingoCell -> BingoCell
 markCell num cell =
     if cell.chosen then
         cell
@@ -106,23 +106,23 @@ markCell num cell =
                     cell
 
 
-markChoosable : FizzBuzzNumber -> BingGoBoard -> BingGoBoard
+markChoosable : FizzBuzzNumber -> BingoBoard -> BingoBoard
 markChoosable number board =
     Array.map (markCell number) board
 
 
-clearCell : BingGoCell -> BingGoCell
+clearCell : BingoCell -> BingoCell
 clearCell cell =
     { cell | choosable = False }
 
 
-clearChoosable : BingGoBoard -> BingGoBoard
+clearChoosable : BingoBoard -> BingoBoard
 clearChoosable board =
     Array.map clearCell board
 
 
-isBingGoLine : List CellIndex -> BingGoBoard -> Bool
-isBingGoLine indexes board =
+isBingoLine : List CellIndex -> BingoBoard -> Bool
+isBingoLine indexes board =
     List.map (\index -> Array.get index board) indexes
         |> List.all
             (\maybeCell ->
@@ -135,42 +135,42 @@ isBingGoLine indexes board =
             )
 
 
-checkBingGoIndexes : BingGoBoard -> List CellIndex
-checkBingGoIndexes board =
-    if isBingGoLine [ 0, 1, 2, 3, 4 ] board then
+checkBingoIndexes : BingoBoard -> List CellIndex
+checkBingoIndexes board =
+    if isBingoLine [ 0, 1, 2, 3, 4 ] board then
         [ 0, 1, 2, 3, 4 ]
 
-    else if isBingGoLine [ 5, 6, 7, 8, 9 ] board then
+    else if isBingoLine [ 5, 6, 7, 8, 9 ] board then
         [ 5, 6, 7, 8, 9 ]
 
-    else if isBingGoLine [ 10, 11, 12, 13, 14 ] board then
+    else if isBingoLine [ 10, 11, 12, 13, 14 ] board then
         [ 10, 11, 12, 13, 14 ]
 
-    else if isBingGoLine [ 15, 16, 17, 18, 19 ] board then
+    else if isBingoLine [ 15, 16, 17, 18, 19 ] board then
         [ 15, 16, 17, 18, 19 ]
 
-    else if isBingGoLine [ 20, 21, 22, 23, 24 ] board then
+    else if isBingoLine [ 20, 21, 22, 23, 24 ] board then
         [ 20, 21, 22, 23, 24 ]
 
-    else if isBingGoLine [ 0, 5, 10, 15, 20 ] board then
+    else if isBingoLine [ 0, 5, 10, 15, 20 ] board then
         [ 0, 5, 10, 15, 20 ]
 
-    else if isBingGoLine [ 1, 6, 11, 16, 21 ] board then
+    else if isBingoLine [ 1, 6, 11, 16, 21 ] board then
         [ 1, 6, 11, 16, 21 ]
 
-    else if isBingGoLine [ 2, 7, 12, 17, 22 ] board then
+    else if isBingoLine [ 2, 7, 12, 17, 22 ] board then
         [ 2, 7, 12, 17, 22 ]
 
-    else if isBingGoLine [ 3, 8, 13, 18, 23 ] board then
+    else if isBingoLine [ 3, 8, 13, 18, 23 ] board then
         [ 3, 8, 13, 18, 23 ]
 
-    else if isBingGoLine [ 4, 9, 14, 19, 24 ] board then
+    else if isBingoLine [ 4, 9, 14, 19, 24 ] board then
         [ 4, 9, 14, 19, 24 ]
 
-    else if isBingGoLine [ 0, 6, 12, 18, 24 ] board then
+    else if isBingoLine [ 0, 6, 12, 18, 24 ] board then
         [ 0, 6, 12, 18, 24 ]
 
-    else if isBingGoLine [ 4, 8, 12, 16, 20 ] board then
+    else if isBingoLine [ 4, 8, 12, 16, 20 ] board then
         [ 4, 8, 12, 16, 20 ]
 
     else
@@ -182,7 +182,7 @@ randomListInt =
     Random.list 25 (Random.int 1 99)
 
 
-makeCellFizzOrBuzz : BingGoCell -> Random.Generator BingGoCell
+makeCellFizzOrBuzz : BingoCell -> Random.Generator BingoCell
 makeCellFizzOrBuzz cell =
     case cell.number of
         FizzBuzz ->
@@ -204,12 +204,12 @@ makeCellFizzOrBuzz cell =
             Random.constant cell
 
 
-randomNewBoard : Random.Generator (Maybe BingGoBoard)
+randomNewBoard : Random.Generator (Maybe BingoBoard)
 randomNewBoard =
     randomListInt
         |> Random.map
             (\numbers ->
-                numbers |> makeBingGoBoard
+                numbers |> makeBingoBoard
             )
         |> Random.andThen
             (\maybeBoard ->
@@ -251,12 +251,12 @@ randomFizzBuzzNumber =
 ----------------------------------------------
 
 
-cellColor : List CellIndex -> CellIndex -> BingGoCell -> String
-cellColor bingGoIndexes index cell =
+cellColor : List CellIndex -> CellIndex -> BingoCell -> String
+cellColor bingoIndexes index cell =
     if cell.choosable then
         "red"
 
-    else if cell.chosen && List.member index bingGoIndexes then
+    else if cell.chosen && List.member index bingoIndexes then
         "green"
 
     else if cell.chosen then
@@ -266,11 +266,11 @@ cellColor bingGoIndexes index cell =
         "white"
 
 
-cellView : List CellIndex -> CellIndex -> BingGoCell -> Html.Html Msg
-cellView bingGoIndexes index cell =
+cellView : List CellIndex -> CellIndex -> BingoCell -> Html.Html Msg
+cellView bingoIndexes index cell =
     let
         color =
-            cellColor bingGoIndexes index cell
+            cellColor bingoIndexes index cell
     in
     if cell.choosable then
         td [ style "background-color" color ] [ button [ onClick (CellChosen index) ] [ text (fizzBuzzNumberToStr cell.number) ] ]
@@ -282,32 +282,32 @@ cellView bingGoIndexes index cell =
         td [] [ button [] [ text (fizzBuzzNumberToStr cell.number) ] ]
 
 
-boardRowView : List CellIndex -> Int -> BingGoBoard -> Html.Html Msg
-boardRowView bingGoIndexes rowIndex board =
+boardRowView : List CellIndex -> Int -> BingoBoard -> Html.Html Msg
+boardRowView bingoIndexes rowIndex board =
     tr []
         (board
             |> Array.indexedMap
                 (\index ->
-                    cellView bingGoIndexes (rowIndex * 5 + index)
+                    cellView bingoIndexes (rowIndex * 5 + index)
                 )
             |> Array.toList
         )
 
 
-boardView : List CellIndex -> BingGoBoard -> Html.Html Msg
-boardView bingGoIndexes board =
+boardView : List CellIndex -> BingoBoard -> Html.Html Msg
+boardView bingoIndexes board =
     table []
-        [ boardRowView bingGoIndexes 0 (Array.slice 0 5 board)
-        , boardRowView bingGoIndexes 1 (Array.slice 5 10 board)
-        , boardRowView bingGoIndexes 2 (Array.slice 10 15 board)
-        , boardRowView bingGoIndexes 3 (Array.slice 15 20 board)
-        , boardRowView bingGoIndexes 4 (Array.slice 20 25 board)
+        [ boardRowView bingoIndexes 0 (Array.slice 0 5 board)
+        , boardRowView bingoIndexes 1 (Array.slice 5 10 board)
+        , boardRowView bingoIndexes 2 (Array.slice 10 15 board)
+        , boardRowView bingoIndexes 3 (Array.slice 15 20 board)
+        , boardRowView bingoIndexes 4 (Array.slice 20 25 board)
         ]
 
 
 randomButton : Bool -> Html.Html Msg
-randomButton bingGo =
-    if bingGo then
+randomButton bingo =
+    if bingo then
         div [] []
 
     else
@@ -324,10 +324,10 @@ currentNumberView number =
             div [] [ text "Random Number is ", text (fizzBuzzNumberToStr n) ]
 
 
-showBingGo : Bool -> Html.Html Msg
-showBingGo bingGo =
-    if bingGo then
-        h1 [ style "color" "green" ] [ text "BINGGO!!!" ]
+showBingo : Bool -> Html.Html Msg
+showBingo bingo =
+    if bingo then
+        h1 [ style "color" "green" ] [ text "BINGO!!!" ]
 
     else
         div [] []
@@ -340,17 +340,17 @@ view model =
 
     else
         div []
-            [ boardView model.bingGoIndexes model.board
-            , randomButton (model.bingGoIndexes /= [])
+            [ boardView model.bingoIndexes model.board
+            , randomButton (model.bingoIndexes /= [])
             , currentNumberView model.currentNumber
-            , showBingGo (model.bingGoIndexes /= [])
+            , showBingo (model.bingoIndexes /= [])
             ]
 
 
 type alias Model =
-    { board : BingGoBoard
+    { board : BingoBoard
     , currentNumber : Maybe FizzBuzzNumber
-    , bingGoIndexes : List CellIndex
+    , bingoIndexes : List CellIndex
     }
 
 
@@ -358,7 +358,7 @@ initModel : Model
 initModel =
     { board = Array.empty
     , currentNumber = Nothing
-    , bingGoIndexes = []
+    , bingoIndexes = []
     }
 
 
@@ -367,7 +367,7 @@ type alias CellIndex =
 
 
 type Msg
-    = GotRandomBoard (Maybe BingGoBoard)
+    = GotRandomBoard (Maybe BingoBoard)
     | CellChosen CellIndex
     | GenerateNextNumber
     | GotRandomFizzBuzzNumber FizzBuzzNumber
@@ -395,10 +395,10 @@ update msg model =
                     chooseCell index model.board
                         |> clearChoosable
 
-                newBingGoIndexes =
-                    checkBingGoIndexes newBoard
+                newBingoIndexes =
+                    checkBingoIndexes newBoard
             in
-            ( { model | board = newBoard, bingGoIndexes = newBingGoIndexes }, Cmd.none )
+            ( { model | board = newBoard, bingoIndexes = newBingoIndexes }, Cmd.none )
 
         GenerateNextNumber ->
             ( model, Random.generate GotRandomFizzBuzzNumber randomFizzBuzzNumber )
