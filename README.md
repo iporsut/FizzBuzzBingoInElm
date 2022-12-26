@@ -541,7 +541,7 @@ currentNumberView number =
 showBingGo : Bool -> Html.Html Msg
 showBingGo bingGo =
     if bingGo then
-        h1 [ style "color" "green" ] [ text "BINGO!!!" ]
+        h1 [ style "color" "green" ] [ text "BINGGO!!!" ]
 
     else
         div [] []
